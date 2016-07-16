@@ -6,11 +6,13 @@ using CUDAdrv
 
 # non-exported utility functions
 import CUDAdrv: debug, DEBUG, trace, TRACE
+export nvrtc
 
 
 include("util.jl")
 
 include("compilation.jl")
+include("nvrtc.jl")
 
 include("execution.jl")
 include("intrinsics.jl")
