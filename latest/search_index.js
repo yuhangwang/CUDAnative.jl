@@ -125,15 +125,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Performance",
     "title": "Performance",
     "category": "section",
-    "text": ""
-},
-
-{
-    "location": "man/performance.html#Object-arguments-1",
-    "page": "Performance",
-    "title": "Object arguments",
-    "category": "section",
-    "text": "When passing a rich object like a CuArray to a GPU kernel, there's a memory allocation and copy happening behind the scenes. This means that every kernel call is synchronizing, which can easily kill performance in the case of fine-grained kernels.Although this issue will probably get fixed in the future, a workaround for now is to ensure all arguments are bitstype (ie. declared as primitive bitstype types, not to be confused with the isbits property). Specific to arrays, you can access and pass the underlying device pointer by means of the ptr field of CuArray objects, in addition to the size of the array:function inc_slow(a)\n    a[threadIdx().x] += 1\n\n    return nothing\nend\n\n@cuda (1,3) inc_slow(d_a)                       # implicit alloc & memcpy\n\n\nfunction inc_fast(a_ptr, a_len)\n    a = CuDeviceArray(a_len, a_ptr)\n    a[threadIdx().x] += 1\n\n    return nothing\nend\n\n@cuda (1,3) inc_fast(pointer(d_a), length(d_a)) # no implicit memory ops"
+    "text": "WIP."
 },
 
 {
@@ -213,7 +205,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "CUDAnative.@code_lowered",
     "category": "Macro",
-    "text": "code_lowered\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_lowered on the resulting expression.\n\n\n\n"
+    "text": "code_lowered\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_lowered on the resulting expression.\n\nCan be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
 },
 
 {
@@ -221,7 +213,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "CUDAnative.@code_typed",
     "category": "Macro",
-    "text": "code_typed\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_typed on the resulting expression.\n\n\n\n"
+    "text": "code_typed\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_typed on the resulting expression.\n\nCan be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
 },
 
 {
@@ -229,7 +221,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "CUDAnative.@code_warntype",
     "category": "Macro",
-    "text": "code_warntype\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_warntype on the resulting expression.\n\n\n\n"
+    "text": "code_warntype\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_warntype on the resulting expression.\n\nCan be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
 },
 
 {
@@ -237,7 +229,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "CUDAnative.@code_llvm",
     "category": "Macro",
-    "text": "code_llvm\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_llvm on the resulting expression.\n\n\n\n"
+    "text": "code_llvm\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_llvm on the resulting expression.\n\nCan be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
 },
 
 {
@@ -245,7 +237,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "CUDAnative.@code_ptx",
     "category": "Macro",
-    "text": "code_ptx\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_ptx on the resulting expression.\n\n\n\n"
+    "text": "code_ptx\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_ptx on the resulting expression.\n\nCan be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
 },
 
 {
@@ -253,7 +245,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "CUDAnative.@code_sass",
     "category": "Macro",
-    "text": "code_sass\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_sass on the resulting expression.\n\n\n\n"
+    "text": "code_sass\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_sass on the resulting expression.\n\nCan be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
 },
 
 {
