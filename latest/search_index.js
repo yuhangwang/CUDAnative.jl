@@ -141,7 +141,15 @@ var documenterSearchIndex = {"docs": [
     "page": "Compilation & Execution",
     "title": "CUDAnative.@cuda",
     "category": "Macro",
-    "text": "@cuda (gridDim::CuDim, blockDim::CuDim, [shmem::Int], [stream::CuStream]) func(args...)\n\nHigh-level interface for calling functions on a GPU, queues a kernel launch on the current context. The gridDim and blockDim arguments represent the launch configuration, the optional shmem parameter specifies how much bytes of dynamic shared memory should be allocated (defaulting to 0), while the optional stream parameter indicates on which stream the launch should be scheduled.\n\nThe func argument should be a valid Julia function. It will be compiled to a CUDA function upon first use, and to a certain extent arguments will be converted and managed automatically. Finally, a call to cudacall is performed, scheduling the compiled function for execution on the GPU.\n\n\n\n"
+    "text": "@cuda (gridDim::CuDim, blockDim::CuDim, [shmem::Int], [stream::CuStream]) func(args...)\n\nHigh-level interface for calling functions on a GPU, queues a kernel launch on the current context. The gridDim and blockDim arguments represent the launch configuration, the optional shmem parameter specifies how much bytes of dynamic shared memory should be allocated (defaulting to 0), while the optional stream parameter indicates on which stream the launch should be scheduled.\n\nThe func argument should be a valid Julia function. It will be compiled to a CUDA function upon first use, and to a certain extent arguments will be converted and managed automatically (see cudaconvert). Finally, a call to cudacall is performed, scheduling the compiled function for execution on the GPU.\n\n\n\n"
+},
+
+{
+    "location": "lib/compilation.html#CUDAnative.cudaconvert",
+    "page": "Compilation & Execution",
+    "title": "CUDAnative.cudaconvert",
+    "category": "Function",
+    "text": "cudaconvert(x)\n\nThis function is called for every argument to be passed to a kernel, allowing it to be converted to a GPU-friendly format. By default, the function does nothing and returns the input object x as-is.\n\nFor CuArray objects, a corresponding CuDeviceArray object in global space is returned, which implements GPU-compatible array functionality.\n\n\n\n"
 },
 
 {
@@ -157,7 +165,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Compilation & Execution",
     "title": "Compilation & Execution",
     "category": "section",
-    "text": "CUDAnative.@cuda\nCUDAnative.nearest_warpsize"
+    "text": "CUDAnative.@cuda\nCUDAnative.cudaconvert\nCUDAnative.nearest_warpsize"
 },
 
 {
@@ -205,7 +213,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "CUDAnative.@code_lowered",
     "category": "Macro",
-    "text": "code_lowered\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_lowered on the resulting expression.\n\nCan be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
+    "text": "code_lowered\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_lowered on the resulting expression. Can be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
 },
 
 {
@@ -213,7 +221,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "CUDAnative.@code_typed",
     "category": "Macro",
-    "text": "code_typed\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_typed on the resulting expression.\n\nCan be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
+    "text": "code_typed\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_typed on the resulting expression. Can be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
 },
 
 {
@@ -221,7 +229,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "CUDAnative.@code_warntype",
     "category": "Macro",
-    "text": "code_warntype\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_warntype on the resulting expression.\n\nCan be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
+    "text": "code_warntype\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_warntype on the resulting expression. Can be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
 },
 
 {
@@ -229,7 +237,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "CUDAnative.@code_llvm",
     "category": "Macro",
-    "text": "code_llvm\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_llvm on the resulting expression.\n\nCan be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
+    "text": "code_llvm\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_llvm on the resulting expression. Can be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
 },
 
 {
@@ -237,7 +245,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "CUDAnative.@code_ptx",
     "category": "Macro",
-    "text": "code_ptx\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_ptx on the resulting expression.\n\nCan be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
+    "text": "code_ptx\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_ptx on the resulting expression. Can be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
 },
 
 {
@@ -245,7 +253,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "CUDAnative.@code_sass",
     "category": "Macro",
-    "text": "code_sass\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_sass on the resulting expression.\n\nCan be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
+    "text": "code_sass\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_sass on the resulting expression. Can be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
 },
 
 {
@@ -357,7 +365,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Intrinsics",
     "title": "CUDAnative.@cuStaticSharedMem",
     "category": "Macro",
-    "text": "@cuStaticSharedMem(typ::Type, dims) -> CuDeviceArray{typ}\n\nGet an array of type typ and dimensions dims (either an integer length or tuple shape) pointing to a statically-allocated piece of shared memory. The type should be statically inferable and the dimensions should be constant (without requiring constant propagation, see JuliaLang/julia#5560), or an error will be thrown and the generator function will be called dynamically.\n\nMultiple statically-allocated shared memory arrays can be requested by calling this macro multiple times.\n\n\n\n"
+    "text": "@cuStaticSharedMem(typ::Type, dims) -> CuDeviceArray{typ,Shared}\n\nGet an array of type typ and dimensions dims (either an integer length or tuple shape) pointing to a statically-allocated piece of shared memory. The type should be statically inferable and the dimensions should be constant (without requiring constant propagation, see JuliaLang/julia#5560), or an error will be thrown and the generator function will be called dynamically.\n\nMultiple statically-allocated shared memory arrays can be requested by calling this macro multiple times.\n\n\n\n"
 },
 
 {
@@ -365,7 +373,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Intrinsics",
     "title": "CUDAnative.@cuDynamicSharedMem",
     "category": "Macro",
-    "text": "@cuDynamicSharedMem(typ::Type, dims, offset::Integer=0) -> CuDeviceArray{typ}\n\nGet an array of type typ and dimensions dims (either an integer length or tuple shape) pointing to a dynamically-allocated piece of shared memory. The type should be statically inferable and the dimension and offset parameters should be constant (without requiring constant propagation, see JuliaLang/julia#5560), or an error will be thrown and the generator function will be called dynamically.\n\nDynamic shared memory also needs to be allocated beforehand, when calling the kernel.\n\nOptionally, an offset parameter indicating how many bytes to add to the base shared memory pointer can be specified. This is useful when dealing with a heterogeneous buffer of dynamic shared memory; in the case of a homogeneous multi-part buffer it is preferred to use view.\n\nNote that calling this macro multiple times does not result in different shared arrays; only a single dynamically-allocated shared memory array exists.\n\n\n\n"
+    "text": "@cuDynamicSharedMem(typ::Type, dims, offset::Integer=0) -> CuDeviceArray{typ,Shared}\n\nGet an array of type typ and dimensions dims (either an integer length or tuple shape) pointing to a dynamically-allocated piece of shared memory. The type should be statically inferable and the dimension and offset parameters should be constant (without requiring constant propagation, see JuliaLang/julia#5560), or an error will be thrown and the generator function will be called dynamically.\n\nDynamic shared memory also needs to be allocated beforehand, when calling the kernel.\n\nOptionally, an offset parameter indicating how many bytes to add to the base shared memory pointer can be specified. This is useful when dealing with a heterogeneous buffer of dynamic shared memory; in the case of a homogeneous multi-part buffer it is preferred to use view.\n\nNote that calling this macro multiple times does not result in different shared arrays; only a single dynamically-allocated shared memory array exists.\n\n\n\n"
 },
 
 {
@@ -493,7 +501,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Arrays",
     "title": "CUDAnative.CuDeviceArray",
     "category": "Type",
-    "text": "CuDeviceArray(dims, ptr)\nCuDeviceArray{T}(dims, ptr)\nCuDeviceArray{T,N}(dims, ptr)\n\nConstruct an N-dimensional dense CUDA device array with element type T wrapping a pointer, where N is determined from the length of dims and T is determined from the type of ptr. dims may be a single scalar, or a tuple of integers corresponding to the lengths in each dimension). If the rank N is supplied explicitly as in Array{T,N}(dims), then it must match the length of dims. The same applies to the element type T, which should match the type of the pointer ptr.\n\n\n\n"
+    "text": "CuDeviceArray(dims, ptr)\nCuDeviceArray{T}(dims, ptr)\nCuDeviceArray{T,A}(dims, ptr)\nCuDeviceArray{T,A,N}(dims, ptr)\n\nConstruct an N-dimensional dense CUDA device array with element type T wrapping a pointer, where N is determined from the length of dims and T is determined from the type of ptr. dims may be a single scalar, or a tuple of integers corresponding to the lengths in each dimension). If the rank N is supplied explicitly as in Array{T,N}(dims), then it must match the length of dims. The same applies to the element type T, which should match the type of the pointer ptr.\n\n\n\n"
 },
 
 {
