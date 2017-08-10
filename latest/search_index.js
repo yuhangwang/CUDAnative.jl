@@ -145,6 +145,70 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "man/hacking.html#",
+    "page": "Hacking",
+    "title": "Hacking",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "man/hacking.html#Hacking-1",
+    "page": "Hacking",
+    "title": "Hacking",
+    "category": "section",
+    "text": ""
+},
+
+{
+    "location": "man/hacking.html#Generated-fnuctions-1",
+    "page": "Hacking",
+    "title": "Generated fnuctions",
+    "category": "section",
+    "text": "Generated functions are used heavily in CUDAnative.jl, in combination with LLVM.jl, to generate type-specialized code and IR. If evaluating the generator results in an error, Julia generates a dynamic call to the generator for you to inspect the error at run-time. This is a problem in the world of GPUs, where dynamic calls are prohibited. A band-aid is to print the exception during inference:diff --git a/base/inference.jl b/base/inference.jl\nindex 6443665676..b03d78ddaa 100644\n--- a/base/inference.jl\n+++ b/base/inference.jl\n@@ -2430,7 +2430,10 @@ function typeinf_frame(linfo::MethodInstance, caller, optimize::Bool, cached::Bo\n             try\n                 # user code might throw errors – ignore them\n                 src = get_staged(linfo)\n-            catch\n+            catch ex\n+                println(\"WARNING: An error occurred during generated function execution.\")\n+                println(ex)\n+                ccall(:jlbacktrace, Void, ())\n                 return nothing\n             end\n         else"
+},
+
+{
+    "location": "man/hacking.html#Adding-intrinsics-1",
+    "page": "Hacking",
+    "title": "Adding intrinsics",
+    "category": "section",
+    "text": "Adding intrinsics to CUDAnative.jl can be relatively convoluted, depending on the type of intrinsic. Most of the boil down to inlining a snippet of LLVM IR, using llvmcall (or ccall with the llvmcall calling convention). For more complex code, use LLVM.jl to build the IR string."
+},
+
+{
+    "location": "man/hacking.html#libdevice-intrinsics-1",
+    "page": "Hacking",
+    "title": "libdevice intrinsics",
+    "category": "section",
+    "text": "These intrinsics are represented by function calls to libdevice. Most of them should already be covered. There's a convenience macro, @wrap, simplifying the job of adding and exporting intrinsics, and converting arguments and return values. See the documentation of the macro for more details, and look at src/device/libdevice.jl for examples."
+},
+
+{
+    "location": "man/hacking.html#LLVM-back-end-intrinsics-1",
+    "page": "Hacking",
+    "title": "LLVM back-end intrinsics",
+    "category": "section",
+    "text": "Calls to functions like llvm.nvvm.barrier0 are backed the PTX LLVM back-end, and can be wrapped using ccall with the llvmcall calling convention. For more complex intrinsics, or when you're not actually calling an intrinsic function, you can still use @wrap."
+},
+
+{
+    "location": "man/hacking.html#Inline-PTX-assembly-1",
+    "page": "Hacking",
+    "title": "Inline PTX assembly",
+    "category": "section",
+    "text": "When there's no corresponding libdevice function or PTX back-end intrinsic exposing the required functionality, you can use inline PTX assembly via llvmcall. This requires you to embed the PTX assembly in LLVM IR, which is often messy.If the source of the assembly instructions is CUDA C code, you simplify this task by first compiling the CUDA code using Clang, and adapting the resulting LLVM IR for use within llvmcall. For example, extracting the following function definition from the CUDA SDK:__device__ unsigned int __ballot(int a)\n{\n  int result;\n  asm __volatile__ (\"{ \\n\\t\"\n        \".reg .pred \\t%%p1; \\n\\t\"\n        \"setp.ne.u32 \\t%%p1, %1, 0; \\n\\t\"\n        \"vote.ballot.b32 \\t%0, %%p1; \\n\\t\"\n        \"}\" : \"=r\"(result) : \"r\"(a));\n  return result;\n}We can generate the following LLVM IR by executing clang++ -Xclang -fcuda-is-device -S -emit-llvm -target nvptx64 ballot.cu -o - (you might need to add some CUDA boilerplate):define i32 @_Z8__balloti(i32 %a) #0 {\n  %1 = alloca i32, align 4\n  %result = alloca i32, align 4\n  store i32 %a, i32* %1, align 4\n  %2 = load i32, i32* %1, align 4\n  %3 = call i32 asm sideeffect \"{ \\0A\\09.reg .pred \\09%p1; \\0A\\09setp.ne.u32 \\09%p1, $1, 0; \\0A\\09vote.ballot.b32 \\09$0, %p1; \\0A\\09}\", \"=r,r\"(i32 %2) #1, !srcloc !1\n  store i32 %3, i32* %result, align 4\n  %4 = load i32, i32* %result, align 4\n  ret i32 %4\n}Finally, cleaning this code up we end up with the following llvmcall invocation:ballot_asm = \"\"\"{\n   .reg .pred %p1;\n   setp.ne.u32 %p1, \\$1, 0;\n   vote.ballot.b32 \\$0, %p1;\n}\"\"\"\n\nfunction ballot(pred::Bool)\n    return Base.llvmcall(\n        \"\"\"%2 = call i32 asm sideeffect \"$ballot_asm\", \"=r,r\"(i32 %0)\n           ret i32 %2\"\"\",\n        UInt32, Tuple{Int32}, convert(Int32, pred))\nendIn the future, we will use LLVM.jl to properly embed inline assembly instead of this string-based hackery."
+},
+
+{
+    "location": "man/hacking.html#Other-functionality-1",
+    "page": "Hacking",
+    "title": "Other functionality",
+    "category": "section",
+    "text": "For other functionality, like shared memory, or when some additional management is required, like storing a global variable for printf's formatting string, you should use LLVM.jl to build the IR code instead of hacking strings together. As this doesn't touch global state, you can even do so from a @generated function. Do take care however to use Julia's LLVM context for all operations."
+},
+
+{
     "location": "lib/compilation.html#",
     "page": "Compilation & Execution",
     "title": "Compilation & Execution",
