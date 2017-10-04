@@ -517,7 +517,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Intrinsics",
     "title": "CUDAnative.shfl",
     "category": "Function",
-    "text": "shfl_idx(val, src::Integer, width::Integer=32)\n\nShuffle a value from a directly indexed lane src\n\n\n\n"
+    "text": "shfl(val, lane::Integer, width::Integer=32)\nshfl_sync(val, lane::Integer, width::Integer=32, threadmask::UInt32=0xffffffff)\n\nShuffle a value from a directly indexed lane lane.\n\n\n\n"
 },
 
 {
@@ -525,7 +525,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Intrinsics",
     "title": "CUDAnative.shfl_up",
     "category": "Function",
-    "text": "shfl_up(val, src::Integer, width::Integer=32)\n\nShuffle a value from a lane with lower ID relative to caller.\n\n\n\n"
+    "text": "shfl_up(val, delta::Integer, width::Integer=32)\nshfl_up_sync(val, delta::Integer, width::Integer=32, threadmask::UInt32=0xffffffff)\n\nShuffle a value from a lane with lower ID relative to caller.\n\n\n\n"
 },
 
 {
@@ -533,7 +533,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Intrinsics",
     "title": "CUDAnative.shfl_down",
     "category": "Function",
-    "text": "shfl_down(val, src::Integer, width::Integer=32)\n\nShuffle a value from a lane with higher ID relative to caller.\n\n\n\n"
+    "text": "shfl_down(val, delta::Integer, width::Integer=32)\nshfl_down_sync(val, delta::Integer, width::Integer=32, threadmask::UInt32=0xffffffff)\n\nShuffle a value from a lane with higher ID relative to caller.\n\n\n\n"
 },
 
 {
@@ -541,7 +541,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Intrinsics",
     "title": "CUDAnative.shfl_xor",
     "category": "Function",
-    "text": "shfl_xor(val, src::Integer, width::Integer=32)\n\nShuffle a value from a lane based on bitwise XOR of own lane ID.\n\n\n\n"
+    "text": "shfl_xor(val, mask::Integer, width::Integer=32)\nshfl_xor_sync(val, mask::Integer, width::Integer=32, threadmask::UInt32=0xffffffff)\n\nShuffle a value from a lane based on bitwise XOR of own lane ID with mask.\n\n\n\n"
 },
 
 {
